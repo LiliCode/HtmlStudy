@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 学习</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>CSS 学习</h1>
+    <p style="color: red; font-size: large;">css的内联样式</p>
+    <p class="pClass">css 内部样式</p>
+    <p class="testP">css 使用外部样式</p>
+    <p title="">属性选择器</p>
+    <p title="hahaha">属性选择器</p>
+    <div>
+        <p class="name">My name is tom</p>
+    </div>
+    <p class="descrp">这里是个人描述</p>
+    <p class="tel">电话号码: 19908782342</p>
+    <div>
+        <p class="tel">电话号码: 19908782342</p>
+    </div>
+
+    <h2>这是二级标题</h2>
+    <h3>这是三级标题</h3>
+    <h4>这是二级标题</h4>
+
+    <div class="extends">
+        <span>这里测试继承样式</span>
+    </div>
+
+    <span class="testImportant">这里测试 !important</span>
+
+
+    <div class="box">
+        <div class="sub-box"></div>
+    </div>
+</body>
+<style>
+    .pClass {
+        font-size: 30px;
+        color: blue;
+        font-weight: 700;
+    }
+
+    div .name {
+        color: red;
+        font-size: 20px;
+    }
+
+    p.descrp {
+        color: green;
+    }
+
+    div > .tel {
+        color: blueviolet;
+    }
+
+    h2,h3,h4 {
+        color: cadetblue;
+    }
+
+    .extends {
+        color: crimson;
+    }
+
+    div span {
+        color: chocolate;
+    }
+
+    .testImportant {
+        color: aquamarine !important;
+    }
+
+    .testImportant {
+        color: brown;
+    }
+
+
+    .box {
+        background-color: blueviolet;
+        width: 100px;
+        height: 100px;
+        border: 10px solid black;
+        padding: 10px 20px 10px 20px;
+        margin: 8px 9px 8px 9px;
+    }
+
+    .box .sub-box {
+        background-color: cadetblue;
+        width: 100px;
+        height: 100px;
+    }
+</style>
+</html>
