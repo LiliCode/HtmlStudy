@@ -1,4 +1,4 @@
-# Vue 学习笔记
+# Vue3 基础
 
 Vue 是一个 javascript 的渐进式 UI 框架，单个模块可以使用，单个页面也可以使用，整个项目也可以使用。
 
@@ -787,4 +787,236 @@ export default {
     <p>{{ data.msg }}</p>
 </template>
 ```
+
+## Vue 的生命周期
+
+1. beforeCreate 组件创建前
+2. created 组件创建后
+3. beforeMount 组件渲染前
+4. mounted 组件渲染后，UI已经展示完成
+5. beforeUpdate 组件更新前状态
+6. updated 组件更新后，数据完成更改，DOM 重新渲染完成
+7. beforeUnmount 组件销毁之前执行
+8. unmounted 组件已经销毁，DOM元素存在，只是不再受 Vue 控制
+
+组件生命周期分为以下几个阶段
+
+| 生命周期   | 执行前前 | 执行后 |
+|  ----  | ----  | ---- |
+| 创建 | beforeCreate | created |
+| 挂载  | beforeMount | mounted |
+| 刷新 | beforeUpdate | updated |
+| 卸载  | beforeUnmount | unmounted |
+
+如下代码所示
+
+```html
+<template>
+    <h1>组件生命周期</h1>
+</template>
+
+<script>
+export default {
+  // 组件生命周期函数
+  beforeCreate() {
+    console.log('组件创建之前')
+  },
+  created() {
+    console.log('组件已经创建')
+  },
+  beforeMount() {
+    console.log('组件渲染之前')
+  },
+  mounted() {
+    console.log('组件渲染完成')
+  },
+  beforeUpdate() {
+    console.log('组件更新之前')
+  },
+  updated() {
+    console.log('组件已经更新')
+  },
+  beforeUnmount() {
+    console.log('组件销毁之前')
+  },
+  unmounted() {
+    console.log('组件已经销毁')
+  }
+}
+</script>
+```
+
+## 动态组件
+
+有些场景需要来回切换组件的显示，例如一个App首页，拥有多个 Tab 可以切换页面，这个时候就需要用到动态组件。
+
+动态组件使用 `<component />` 去展示组件。
+
+如下创建了两个组件
+
+组件A
+
+```html
+<template>
+  <div class="contaiiner">
+    <h2>这里是组件A</h2>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+
+    }
+  }
+}
+</script>
+```
+
+组件B
+
+```html
+<template>
+  <div class="contaiiner">
+    <h2>这里是组件B</h2>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      
+    }
+  }
+}
+</script>
+```
+
+在下面这个组件中展示两个组件，动态切换
+
+```html
+<template>
+  <div class="container">
+    <component class="content" :is="currentComponent"/>
+    <div class="tab">
+      <button @click="changeComponent('ComponentA')">组件A</button>
+      <button @click="changeComponent('ComponentB')">组件B</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import ComponentA from './ComponentA.vue';
+import ComponentB from './ComponentB.vue';
+
+export default {
+  components: {
+    ComponentA, ComponentB,
+  },
+  data() {
+    return  {
+      currentComponent: 'ComponentA',
+    }
+  },
+  methods: {
+    // 切换组件
+    changeComponent(e) {
+      this.currentComponent = e
+    },
+  },
+}
+</script>
+```
+
+## 组件保活
+
+上面的动态组件中，来回切换组件A和组件B，会导致没切换一次都会被销毁/创建一次组件，这样就不能达到状态保持，不是我们想要的结果，我们可以使用 <keep-alive /> 组件进行保活。
+
+所以上面的 component 的代码可以这么写。
+
+```html
+<keep-alive>
+    <component class="content" :is="currentComponent"/>
+</keep-alive>
+```
+
+## 异步组件
+
+在大型项目中，一个App首页可能存在四五个页面，如果同时加载了这五个页面，会导致网络请求几乎同时请求，会造成性能上的影响。为了解决这个问题，引入了异步组件。
+
+如何使用异步组件
+
+1. 导入 defineAsyncComponent 函数
+    ```js
+    import { defineAsyncComponent } from 'vue';
+    ```
+2. 使用 defineAsyncComponent 函数异步获取组件
+    ```js
+    const ComponentA = defineAsyncComponent(() => import('./ComponentA.vue'))
+    ```
+
+这样就可以实现异步加载了。
+
+## 依赖注入
+
+通常情况下，当我们需要从父组件向子组件传递数据时，会使用 props。想象一下这样的结构：有一些多层级嵌套的组件，形成了一颗巨大的组件树，而某个深层的子组件需要一个较远的祖先组件中的部分数据。在这种情况下，如果仅使用 props 则必须将其沿着组件链逐级传递下去，这会非常麻烦。
+
+`provide` 和 `inject` 可以帮助我们解决这一问题。 一个父组件相对于其所有的后代组件，会作为依赖提供者。任何后代的组件树，无论层级有多深，都可以注入由父组件提供给整条链路的依赖。
+
+## Provide 提供者
+
+要为组件后代提供数据，需要使用到 `provide` 选项
+
+```js
+export default {
+  provide: {
+    message: 'hello world'
+  }
+}
+```
+
+对于 provide 对象上的每一个属性，后代组件会用其 key 为注入名查找期望注入的值，属性的值就是要提供的数据。
+
+### Inject 注入
+
+要注入上层组件提供的数据，需使用 inject 选项来声明：
+
+```js
+export default {
+  inject: ['message'],
+  created() {
+    console.log(this.message) // injected value
+  }
+}
+```
+
+注入会在组件自身的状态之前被解析，因此你可以在 data() 中访问到注入的属性：
+
+```js
+export default {
+  inject: ['message'],
+  data() {
+    return {
+      // 基于注入值的初始数据
+      fullMessage: this.message
+    }
+  }
+}
+```
+
+### 全局注入（应用层 Provide）
+
+除了在一个组件中提供依赖，我们还可以在整个应用层面提供依赖：
+
+```js
+import { createApp } from 'vue'
+
+const app = createApp({})
+
+app.provide(/* 注入名 */ 'message', /* 值 */ 'hello!')
+```
+
+在应用级别提供的数据在该应用内的所有组件中都可以注入。这在你编写插件时会特别有用，因为插件一般都不会使用组件形式来提供值。
 
