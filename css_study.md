@@ -274,13 +274,16 @@ css 样式由选择器和属性组成，例如：
 
 3. `flex-wrap` 设置当弹性盒子的子元素超出父容器时是否换行
 4. `flex-flow` 是 `flex-direction` 和 `flex-wrap` 两个属性的简写
+    ```css
+    flex-flow: row wrap;
+    ```
 5. `justify-content` 设置弹性盒子中元素在主轴（横轴）方向上的对齐方式
 6. `align-items` 设置弹性盒子中元素在侧轴（纵轴）方向上的对齐方式
 7. `align-content` 修改 flex-wrap 属性的行为，类似 align-items，但不是设置子元素对齐，而是设置行对齐
-8. `order` 设置弹性盒子中子元素的排列顺序
+8. `order` 在弹性盒子中对元素进行排序，值越小越靠前显示，值越大越靠后，默认为0
 9. `align-self` 在弹性盒子的子元素上使用，用来覆盖容器的 align-items 属性
 10. `flex` 设置弹性盒子中子元素如何分配空间
 11. `flex-grow` 设置弹性盒子的扩展比率
-12. `flex-shrink`	设置弹性盒子的收缩比率
+12. `flex-shrink` 设置弹性盒子的收缩比率
 13. `flex-basis` 设置弹性盒子伸缩基准值
 
